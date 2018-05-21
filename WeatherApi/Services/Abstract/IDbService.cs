@@ -1,8 +1,4 @@
-﻿using Microsoft.Azure.Graphs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WeatherApi.Models;
 
 namespace WeatherApi.Services
@@ -15,5 +11,6 @@ namespace WeatherApi.Services
 
         void AddLocation(WeatherLocation weather);
 
+        Task ReplaceWeatherDocument(string zip, WeatherLocation locationUpdate);
     }
 }

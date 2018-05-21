@@ -1,13 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
+﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
-using Microsoft.Azure.Graphs;
-using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using WeatherApi.Models;
 
 namespace WeatherApi.Services
@@ -76,20 +72,20 @@ namespace WeatherApi.Services
             FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
             IQueryable<WeatherLocation> WeatherQuery = this.client.CreateDocumentQuery<WeatherLocation>(
                 UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-                $"SELECT * FROM {DatabaseId} WHERE {DatabaseId}.zip={zip}",
+                $"SELECT * FROM WeatherInfo WHERE WeatherInfo.Zip = '{zip}'",
                 queryOptions);
 
             // HACK:: I assume there is only one returned. This assumption should not be made
             foreach (WeatherLocation location in WeatherQuery)
             {
-                if (location.Date == DateTime.Today.Date)
-                {
+                //if (location.Date == DateTime.Today.Date)
+                //{
                     return location;
-                }
-                else
-                {
-                    return null;
-                }
+                //}
+                //else
+                //{
+                //    return null;
+                //}
             }
             return null;
         }
@@ -115,7 +111,5 @@ namespace WeatherApi.Services
                 Console.WriteLine("\tRead {0}", loc.Name);
             }
         }
-
-        
     }
 }

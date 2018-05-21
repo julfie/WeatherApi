@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WeatherApi.Models;
@@ -44,6 +43,11 @@ namespace WeatherApi.Services
                     weather = await WeatherHelper.GetWeatherDescription(zip);
                     this.DbService.AddLocation(weather);
                 }
+                else if (weather.Date != DateTime.Today.Date)
+                {
+                    weather = await WeatherHelper.GetWeatherDescription(zip);
+                    await this.DbService.ReplaceWeatherDocument(weather.Zip, weather);
+                }
                 return "The Weather in " + weather.Name + " is " + weather.Description;
             }
             catch (HttpRequestException httpRequestException)
@@ -51,6 +55,5 @@ namespace WeatherApi.Services
                 return ($"Error getting weather from OpenWeather: {httpRequestException.Message}");
             }
         }
-
     }
 }
