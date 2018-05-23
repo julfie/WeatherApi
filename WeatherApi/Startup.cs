@@ -19,6 +19,19 @@ namespace WeatherApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
+
 
             services.AddSingleton<IValueService, ValueService>();
             services.AddSingleton<IDbService, DbService>();
@@ -30,6 +43,8 @@ namespace WeatherApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDefaultFiles();
+                app.UseStaticFiles();
             }
 
             app.UseMvc();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using WeatherApi.Models;
 
 namespace WeatherApi.Services
 {
@@ -9,6 +10,6 @@ namespace WeatherApi.Services
 
         ICollection<string> GetValues();
 
-        Task<string> GetDescription(string zip);
+        Task<WeatherLocation> GetDescription(string zip);
     }
 }

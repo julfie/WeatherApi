@@ -33,26 +33,28 @@ namespace WeatherApi.Services
         }
 
         // Getting the Name of the Zip code area
-        public async Task<string> GetDescription(string zip)
+        public async Task<WeatherLocation> GetDescription(string zip)
         {
             try
             {
                 WeatherLocation weather = this.DbService.ZipSearch(zip);
+                Console.WriteLine(weather);
                 if (weather == null)
                 {
                     weather = await WeatherHelper.GetWeatherDescription(zip);
                     this.DbService.AddLocation(weather);
                 }
-                else if (weather.Date != DateTime.Today.Date)
+                // TODO:: FIX THIS FOR REALS
+                else if (weather.Forecasts[0].Date != DateTime.Today.ToString("MM/dd h:mm tt"))
                 {
                     weather = await WeatherHelper.GetWeatherDescription(zip);
                     await this.DbService.ReplaceWeatherDocument(weather.Zip, weather);
                 }
-                return "The Weather in " + weather.Name + " is " + weather.Description;
+                return weather;
             }
             catch (HttpRequestException httpRequestException)
             {
-                return ($"Error getting weather from OpenWeather: {httpRequestException.Message}");
+                return null; // ($"Error getting weather from OpenWeather: {httpRequestException.Message}");
             }
         }
     }

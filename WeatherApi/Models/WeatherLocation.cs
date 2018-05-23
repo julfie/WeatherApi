@@ -14,16 +14,7 @@ namespace WeatherApi.Models
         [JsonProperty(PropertyName = "Name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "Description")]
-        public string Description { get; set; }
-
-        [JsonProperty(PropertyName = "Temp")]
-        public string Temp { get; set; }
-
-        [JsonProperty(PropertyName = "Humidity")]
-        public string Humidity { get; set; }
-
-        [JsonProperty(PropertyName = "date")]
-        public DateTime Date { get; set; }
+        [JsonProperty(PropertyName = "Forecasts")]
+        public Forecast[] Forecasts { get; set; }
     }
 }

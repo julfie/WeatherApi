@@ -25,20 +25,8 @@ namespace WeatherApi.Services
                     new DocumentCollection { Id = CollectionId },
                     new RequestOptions { OfferThroughput = 400 }
                 );
-
-            // test by adding fake information and printing it
-            WeatherLocation newLocation = new WeatherLocation
-            {
-                Id = "0",
-                Zip = "0",
-                Name = "Not Redmond",
-                Description = "a refreshing void",
-                Temp = "over 9000",
-                Humidity = "100",
-                Date = DateTime.Today.Date
-            };
-            AddLocation(newLocation);
-            ListWeatherLocations();
+            
+            //ListWeatherLocations();
         }
 
         // add a new location to the db
@@ -75,17 +63,10 @@ namespace WeatherApi.Services
                 $"SELECT * FROM WeatherInfo WHERE WeatherInfo.Zip = '{zip}'",
                 queryOptions);
 
-            // HACK:: I assume there is only one returned. This assumption should not be made
+            // HACK:: I assume there is only one returned. This assumption should not really be made
             foreach (WeatherLocation location in WeatherQuery)
             {
-                //if (location.Date == DateTime.Today.Date)
-                //{
-                    return location;
-                //}
-                //else
-                //{
-                //    return null;
-                //}
+                return location;
             }
             return null;
         }
@@ -93,7 +74,7 @@ namespace WeatherApi.Services
         public async Task ReplaceWeatherDocument(string zip, WeatherLocation locationUpdate)
         {
             await this.client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, zip), locationUpdate);
-            Console.WriteLine("Replaced Family {0}", zip);
+            Console.WriteLine("Replaced {0}", zip);
         }
 
         private void ListWeatherLocations()
@@ -102,7 +83,7 @@ namespace WeatherApi.Services
             IQueryable<WeatherLocation> WeatherQuery = this.client.CreateDocumentQuery<WeatherLocation>(
                 UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
                 "SELECT * FROM WeatherInfo",
-                queryOptions);
+                queryOptions); 
 
             Console.WriteLine("Running direct SQL query...");
             // printing all the locations currently saved
